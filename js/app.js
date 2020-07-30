@@ -2,14 +2,14 @@
 
   	// map options
 		var options = {
-      center: [37.9083, -122.6046],
+      center: [37.9081, -122.6046],
       zoomSnap: .1,
-      zoomControl: false
+      zoom: 19.1    
       
     }
 
     // create a Leaflet map in our division container with id of 'map'
-    var map = L.map('map');
+    var map = L.map('map', {zoomControl: false});
 
     // Leaflet providers base map URL
     var basemap_source =
@@ -25,20 +25,36 @@
     // request some basemap tiles and add to the map
     var tiles = L.tileLayer(basemap_source, basemap_options).addTo(map);
 
-    var commonStyles = {
-      weight: 1,
-      stroke: 1,
-      fillOpacity: .8
-    }
+    let trailHeadIcon = L.icon({
+      iconUrl: 'svgs/noun_Trail_549646.svg',
+      iconSize: [40, 40]
+    })
 
     // add pantoll trailhead
-    // let pantollTrailHead = L.geoJson(trailHeads, {
-    //   pointToLayer: function (feature, latlngs){
-    //     return L.circleMarker (feature, commonStyles);
-    //   },
+    let pantollTrailHead = L.geoJson(trailHeads, {
+      pointToLayer: function (feature, latlng){
+        return L.marker (latlng, {icon: trailHeadIcon});
+      },
+      // filter points to only show pantoll trailhead
+      filter: function (feature) {
+        if (feature.properties.Name == "Pantoll Ranger Station Loop"){
+          return feature
+        }
+      },
 
-    //   }).addTo(map);
+      onEachFeature: function (feature, layer) {
+        var popup = "Pantoll Ranger Station Loop <img src='images/MOTA_150818_PMM_1143.jpg'/>"
 
+        layer.bindPopup(popup, {
+          maxWidth: '150px'
+        })
+      }
+
+      
+
+
+      }).addTo(map);
+      map.fitBounds(pantollTrailHead.getBounds())
    
     // add pantoll loop to map
     let pantoll = L.geoJson(hikes, {
@@ -58,12 +74,11 @@
         color: '#000000',
         weight: 2,
         dashArray: '4, 4'
-        
-
       }
 
     }
     }).addTo(map)
     map.fitBounds(pantoll.getBounds())
 
+  
 })();
