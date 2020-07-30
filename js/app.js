@@ -43,15 +43,10 @@
       },
 
       onEachFeature: function (feature, layer) {
-        var popup = "Pantoll Ranger Station Loop <img src='images/MOTA_150818_PMM_1143.jpg'/>"
+        var popup = "<p>Pantoll Ranger Station</p> <img src='images/MOTA_141026_ATB_027.jpg'/>"
 
-        layer.bindPopup(popup, {
-          maxWidth: '150px'
-        })
+        layer.bindPopup(popup)
       }
-
-      
-
 
       }).addTo(map);
       map.fitBounds(pantollTrailHead.getBounds())
